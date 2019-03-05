@@ -18,27 +18,7 @@ class CreateController extends \humhub\components\Controller
 
     public function actionIndex()
     {
-        $ext = 'drawio';
-
-        $model = new \humhub\modules\drawio\models\CreateDocument();
-        if ($model->load(Yii::$app->request->post())) {
-            $file = $model->save();
-            if ($file !== false) {
-                return $this->asJson([
-                            'success' => true,
-                            'file' => FileHelper::getFileInfos($file),
-                            'openUrl' => Url::to(['/drawio/open', 'guid' => $file->guid]),
-                            'openFlag' => (boolean) $model->openFlag
-                ]);
-            } else {
-                return $this->asJson([
-                            'success' => false,
-                            'output' => $this->renderAjax('index', ['model' => $model, 'ext' => $ext])
-                ]);
-            }
-        }
-
-        return $this->renderAjax('index', ['model' => $model, 'ext' => $ext]);
+        return $this->renderAjax('index');
     }
 
 }

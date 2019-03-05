@@ -24,6 +24,7 @@ class CreateDocument extends Model
     public $fileName;
     public $openFlag = true;
 
+
     public function rules()
     {
         return [
@@ -55,5 +56,7 @@ class CreateDocument extends Model
 
         return false;
     }
+
+
 
 }

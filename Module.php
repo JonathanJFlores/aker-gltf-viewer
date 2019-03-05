@@ -8,6 +8,9 @@
 
 namespace humhub\modules\drawio;
 
+use humhub\modules\space\models\Space;
+use humhub\modules\content\components\ContentContainerModule;
+use humhub\modules\content\components\ContentContainerActiveRecord;
 use Yii;
 use yii\helpers\Url;
 
@@ -16,10 +19,34 @@ use yii\helpers\Url;
  *
  * @since 0.5
  */
-class Module extends \humhub\components\Module
+class Module extends ContentContainerModule
 {
 
     public $resourcesPath = 'resources';
+
+    public function getContentContainerTypes()
+    {
+        return [
+            Space::class,
+        ];
+    }
+
+    public function disable()
+    {
+        parent::disable();
+    }
+
+    public function getContentContainerDescription(ContentContainerActiveRecord $container)
+    {
+        if ($container instanceof Space) {
+            return Yii::t('DrawioModule.base', 'View GLTF file');
+        }
+    }
+
+    public function disableContentContainer(ContentContainerActiveRecord $container)
+    {
+        parent::disableContentContainer($container);
+    }
 
     /**
      * @inheritdoc
@@ -27,7 +54,7 @@ class Module extends \humhub\components\Module
     public function getConfigUrl()
     {
         return Url::to([
-                    '/drawio/admin'
+            '/drawio/admin'
         ]);
     }
 

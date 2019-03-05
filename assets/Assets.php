@@ -17,15 +17,21 @@ class Assets extends AssetBundle
     public $publishOptions = [
         'forceCopy' => true
     ];
-    public $css = [];
+    public $css = [
+        'css/site.css'
+    ];
     public $jsOptions = [
-        'position' => \yii\web\View::POS_BEGIN
+        'position' => \yii\web\View::POS_END
     ];
 
     public function init()
     {
 
         $this->js = [
+            'three.js',
+            'GLTF2Loader.js',
+            'OrbitControls.js',
+            'util.js',
             'humhub.drawio.js'
         ];
 

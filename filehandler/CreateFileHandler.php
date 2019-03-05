@@ -26,7 +26,7 @@ class CreateFileHandler extends BaseFileHandler
     public function getLinkAttributes()
     {
         return [
-            'label' => Yii::t('DrawioModule.base', 'Create draw.io document'),
+            'label' => Yii::t('DrawioModule.base', 'View GLTF file'),
             'data-action-url' => Url::to(['/drawio/create']),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'drawio-modal',

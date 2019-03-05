@@ -18,6 +18,19 @@ use humhub\modules\file\libs\FileHelper;
 class Events
 {
 
+    public static function onSpaceMenuInit($event)
+    {
+        if ($event->sender->space !== null && $event->sender->space->isModuleEnabled('drawio') && $event->sender->space->isMember()) {
+            $event->sender->addItem([
+                'label' => Yii::t('DrawioModule.base', 'Lecciones'),
+                'group' => 'modules',
+                'icon' => '<i class="fa fa-cube" aria-hidden="true"></i>',
+                'url' => $event->sender->space->createUrl('//drawio/list'),
+                'isActive' => (Yii::$app->controller->module && Yii::$app->controller->module->id == 'drawio'),
+            ]);
+        }
+    }
+
     public static function onFileHandlerCollection($event)
     {
         /* @var $collection FileHandlerCollection */
@@ -31,7 +44,7 @@ class Events
         /* @var $module \humhub\modules\drawio\Module */
         $module = Yii::$app->getModule('drawio');
 
-        if ($collection->file === null)  {
+        if ($collection->file === null) {
             return;
         }
 
