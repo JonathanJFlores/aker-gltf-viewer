@@ -100,6 +100,8 @@
 }
 
 #model-view {
-  width: 100%;
-  margin: 0 auto;
+  margin: 0px;
+  overflow: hidden;
+  /* Opera 15+, Chrome 25+, IE 10+, Firefox 16+, Safari 6.1+, iOS 7+, Android 4.4+ */
+  background-image: radial-gradient(#ffffff, #838383);
 }

@@ -75,7 +75,7 @@ var robox = (function() {
   renderer.gammaOutput = true;
   renderer.gammaFactor = 2.2;
   renderer.toneMappingExposure = 1.0;
-  renderer.setClearColor(0xcccccc, 1);
+  renderer.setClearColor(0x000000, 0);
   renderer.setPixelRatio(window.devicePixelRatio);
 
   // Axis Renderer
@@ -108,10 +108,11 @@ var robox = (function() {
   front.position = new THREE.Vector3(0, 0, 0);
   front.userData = { command: "front" };
   sceneAxis.add(front);
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  const hemiLight = new THREE.HemisphereLight();
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   // ambientLight.position.set(0, 1, 0);
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.3);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
   directionalLight.position.set(0.5, 0, 0.866);
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -135,7 +136,9 @@ var robox = (function() {
     configCamera: function() {
       camera.add(ambientLight);
       camera.add(directionalLight);
+      //scene.add(hemiLight);
       scene.add(camera);
+
       sceneAxis.add(cameraAxis);
     },
 
