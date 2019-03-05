@@ -34,11 +34,11 @@ var render = function() {
   requestAnimationFrame(render);
   robox.getControls().update();
 
-  robox.getAxisCamera().position.copy(robox.getCamera().position);
-  robox.getAxisCamera().position.sub(robox.getControls().target);
-  robox.getAxisCamera().position.setLength(1);
-
-  robox.getAxisCamera().lookAt(robox.getAxisScene().position);
+  //robox.getAxisCamera().position.copy(robox.getCamera().position);
+  //robox.getAxisCamera().position.sub(robox.getControls().target);
+  //robox.getAxisCamera().position.setLength(6);
+  //console.log(robox.getCamera().position);
+  robox.getAxisCamera().lookAt(new THREE.Vector3(0, 0, 0));
 
   robox.getRenderer().render(robox.getScene(), robox.getCamera());
   robox.getAxisRenderer().render(robox.getAxisScene(), robox.getAxisCamera());

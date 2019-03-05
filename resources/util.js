@@ -59,15 +59,11 @@ function loadModel(path, scene, controls, camera) {
 }
 // Main object
 var robox = (function() {
-  let textGeometry;
   const fov = 60;
   const width = 600;
   const height = 500;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 1000);
-
-  const axesHelper = new THREE.AxesHelper(3);
-  scene.add(axesHelper);
 
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -83,12 +79,18 @@ var robox = (function() {
   renderer.setPixelRatio(window.devicePixelRatio);
 
   // Axis Renderer
-  const rendererAxis = new THREE.WebGLRenderer({ antialias: true });
+  const rendererAxis = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true,
+    preserveDrawingBuffer: true,
+    premultipliedAlpha: false
+  });
   rendererAxis.setSize(80, 80);
   rendererAxis.setClearColor(0xd4d4bf, 1);
-
+  const helper = new THREE.AxesHelper(8);
   // Axis Scene.
   const sceneAxis = new THREE.Scene();
+  sceneAxis.add(helper);
   // Axis Camera
   const cameraAxis = new THREE.PerspectiveCamera(
     fov,
@@ -97,17 +99,15 @@ var robox = (function() {
     1000
   );
   cameraAxis.up = camera.up;
-  // Second canvas Axes
-  const axis = new THREE.AxesHelper(1);
-  sceneAxis.add(axis);
-
-  // load font
-  loadFont(textGeometry);
-  const textMaterial = new THREE.MeshBasicMaterial({
-    color: new THREE.Color("rgb(255, 250, 250)")
-  });
-  const text = new THREE.Mesh(textGeometry, textMaterial);
-
+  //cameraAxis.position = new THREE.Vector3(3, 0, 2);
+  cameraAxis.position.set(0, 0, 6);
+  // Planes as buttons
+  const front = createPlane(0xffff00);
+  //front.position.x += 1;
+  //front.position.y = 5;
+  front.position = new THREE.Vector3(0, 0, 0);
+  front.userData = { command: "front" };
+  sceneAxis.add(front);
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
   // ambientLight.position.set(0, 1, 0);
 
@@ -158,15 +158,10 @@ function onTransitionEnd(event) {
   document.getElementById("model-view").style.display = "flex";
 }
 
-function loadFont(textGeometry) {
-  var loader = new THREE.FontLoader();
-  loader.load("./fonts/helvetiker_regular.typeface.json", font => {
-    textGeometry = new THREE.TextGeometry("Y", {
-      size: 5,
-      height: 2,
-      curveSegments: 6,
-      font: font,
-      style: "normal"
-    });
+function createPlane(color) {
+  const geometry = new THREE.PlaneGeometry();
+  const material = new THREE.MeshBasicMaterial({
+    color
   });
+  return new THREE.Mesh(geometry, material);
 }
