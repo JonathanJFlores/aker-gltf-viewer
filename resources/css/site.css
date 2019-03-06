@@ -77,11 +77,6 @@
   }
 }
 
-#model-view {
-  position: relative;
-  z-index: 2;
-}
-
 .control-button {
   position: relative;
   z-index: 3;

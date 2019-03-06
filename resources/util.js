@@ -85,8 +85,8 @@ var robox = (function() {
     preserveDrawingBuffer: true,
     premultipliedAlpha: false
   });
-  rendererAxis.setSize(80, 80);
-  rendererAxis.setClearColor(0xd4d4bf, 1);
+  /*rendererAxis.setSize(80, 80);
+  rendererAxis.setClearColor(0xd4d4bf, 1);*/
   const helper = new THREE.AxesHelper(8);
   // Axis Scene.
   const sceneAxis = new THREE.Scene();
@@ -151,6 +151,10 @@ var robox = (function() {
     },
     getAxisCamera: function() {
       return cameraAxis;
+    },
+
+    setRendererSize: function(width, height) {
+      rendererAxis.setSize(width, height);
     }
   };
 })();
@@ -158,7 +162,13 @@ var robox = (function() {
 function onTransitionEnd(event) {
   const element = event.target;
   element.remove();
-  createMainContainer().appendChild(robox.getRenderer().domElement);
+  const container = createMainContainer();
+  container.appendChild(robox.getRenderer().domElement);
+  createGizmoContainer();
+  //createGizmoContainer();
+  /*container.appendChild(
+    createGizmoContainer().appendChild(robox.getAxisRenderer().domElement)
+  );*/
   //document.getElementById("model-view").style.display = "flex";
   /*document
     .getElementById("canvas-container")
@@ -181,4 +191,24 @@ function createMainContainer() {
   mainContainer.style.height = parentNode.clientHeight;
   parentNode.appendChild(mainContainer);
   return mainContainer;
+}
+
+function createGizmoContainer() {
+  const parentNode = document.getElementById("canvas-container");
+  const gizmoContainer = document.createElement("div");
+  const mainContainer = document.getElementById("model-view");
+  const top = parentNode.clientHeight - mainContainer.clientHeight;
+  const right = parentNode.clientWidth - mainContainer.clientWidth;
+  const mainRect = mainContainer.getBoundingClientRect();
+  gizmoContainer.id = "gizmo";
+  gizmoContainer.style.position = "absolute";
+  gizmoContainer.style.width = "20%";
+  gizmoContainer.style.height = "20%";
+  gizmoContainer.style.margin = "5px";
+  gizmoContainer.style.right = `${right.toString()}px`;
+  gizmoContainer.style.top = `${top.toString()}px`;
+  parentNode.appendChild(gizmoContainer);
+  const gizmoRect = gizmoContainer.getBoundingClientRect();
+  robox.setRendererSize(gizmoRect.width, gizmoRect.height);
+  gizmoContainer.appendChild(robox.getAxisRenderer().domElement);
 }
