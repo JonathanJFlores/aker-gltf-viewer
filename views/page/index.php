@@ -9,9 +9,6 @@ $bundle = \humhub\modules\drawio\assets\Assets::register($this);
         <section id="loading-screen" class="row">
             <div id="loader"></div>
         </section>
-        <div id="model-view" class="row" style="display: none;">
-            <div id="inset"></div>
-        </div>
         <div id="model" style="display: none;">
             <?php
             $backSlash = preg_split('/\//', $route);

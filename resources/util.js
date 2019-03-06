@@ -60,8 +60,8 @@ function loadModel(path, scene, controls, camera) {
 // Main object
 var robox = (function() {
   const fov = 60;
-  const width = 600;
-  const height = 500;
+  const width = document.getElementById("canvas-container").clientWidth;
+  const height = document.getElementById("canvas-container").clientWidth;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 1000);
 
@@ -158,7 +158,11 @@ var robox = (function() {
 function onTransitionEnd(event) {
   const element = event.target;
   element.remove();
-  document.getElementById("model-view").style.display = "flex";
+  createMainContainer().appendChild(robox.getRenderer().domElement);
+  //document.getElementById("model-view").style.display = "flex";
+  /*document
+    .getElementById("canvas-container")
+    .appendChild(robox.getRenderer().domElement);*/
 }
 
 function createPlane(color) {
@@ -167,4 +171,14 @@ function createPlane(color) {
     color
   });
   return new THREE.Mesh(geometry, material);
+}
+
+function createMainContainer() {
+  const parentNode = document.getElementById("canvas-container");
+  const mainContainer = document.createElement("div");
+  mainContainer.id = "model-view";
+  mainContainer.style.width = parentNode.clientWidth;
+  mainContainer.style.height = parentNode.clientHeight;
+  parentNode.appendChild(mainContainer);
+  return mainContainer;
 }

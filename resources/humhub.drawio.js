@@ -1,14 +1,14 @@
 humhub.module("drawio", function(module, require, $) {});
 
 // First canvas
-document
+/*document
   .getElementById("model-view")
   .appendChild(robox.getRenderer().domElement);
 
 // Second canvas
 document
   .getElementById("inset")
-  .appendChild(robox.getAxisRenderer().domElement);
+  .appendChild(robox.getAxisRenderer().domElement);*/
 
 // Loading model
 loadModel(
@@ -41,6 +41,6 @@ var render = function() {
   robox.getAxisCamera().lookAt(new THREE.Vector3(0, 0, 0));
 
   robox.getRenderer().render(robox.getScene(), robox.getCamera());
-  robox.getAxisRenderer().render(robox.getAxisScene(), robox.getAxisCamera());
+  //robox.getAxisRenderer().render(robox.getAxisScene(), robox.getAxisCamera());
 };
 render();
