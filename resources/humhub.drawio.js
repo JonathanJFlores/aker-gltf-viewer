@@ -47,7 +47,19 @@ const resizeCanvas = () => {
   robox.getAxisRenderer().setSize(gizmoContainerWidth, gizmoContainerHeight);
 };
 
-window.addEventListener("resize", resizeCanvas);
+// Debounce function to handler resize event
+const debounce = (ms = 500, f) => {
+  let timerId;
+  return (...params) => {
+    window.clearTimeout(timerId);
+    timerId = window.setTimeout(() => {
+      f.apply(null, params);
+    }, ms);
+  };
+};
+
+window.addEventListener("resize", debounce(500, resizeCanvas));
+
 var render = function() {
   requestAnimationFrame(render);
   robox.getControls().update();

@@ -1,3 +1,14 @@
+// Enums for rotation models
+
+let VIEWS = {
+  FRONT: 0,
+  BACK: 1,
+  RIGHT: 2,
+  LEFT: 3,
+  TOP: 4,
+  BOTTOM: 5
+};
+
 function loadModel(path, scene, controls, camera) {
   const len = scene.children.length;
   for (let i = len - 1; i > 0; i--) scene.remove(scene.children[i]);
@@ -87,7 +98,7 @@ var robox = (function() {
   });
   /*rendererAxis.setSize(80, 80);
   rendererAxis.setClearColor(0xd4d4bf, 1);*/
-  const helper = new THREE.AxesHelper(8);
+  const helper = new THREE.AxesHelper(2);
   // Axis Scene.
   const sceneAxis = new THREE.Scene();
   sceneAxis.add(helper);
@@ -101,14 +112,8 @@ var robox = (function() {
   cameraAxis.up = camera.up;
   //cameraAxis.position = new THREE.Vector3(3, 0, 2);
   cameraAxis.position.set(0, 0, 6);
-  // Planes as buttons
-  const front = createPlane(0xffff00);
-  //front.position.x += 1;
-  //front.position.y = 5;
-  front.position = new THREE.Vector3(0, 0, 0);
-  front.userData = { command: "front" };
-  sceneAxis.add(front);
-  const hemiLight = new THREE.HemisphereLight();
+  // cubes as buttons
+  addCubesToAxisScene(sceneAxis);
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   // ambientLight.position.set(0, 1, 0);
 
@@ -165,22 +170,55 @@ function onTransitionEnd(event) {
   const container = createMainContainer();
   container.appendChild(robox.getRenderer().domElement);
   createGizmoContainer();
-  //createGizmoContainer();
-  /*container.appendChild(
-    createGizmoContainer().appendChild(robox.getAxisRenderer().domElement)
-  );*/
-  //document.getElementById("model-view").style.display = "flex";
-  /*document
-    .getElementById("canvas-container")
-    .appendChild(robox.getRenderer().domElement);*/
 }
 
-function createPlane(color) {
-  const geometry = new THREE.PlaneGeometry();
+function createCube(color) {
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
   const material = new THREE.MeshBasicMaterial({
     color
   });
-  return new THREE.Mesh(geometry, material);
+  const mesh = new THREE.Mesh(geometry, material);
+  const edgesGeometry = new THREE.EdgesGeometry(mesh.geometry);
+  const edgesMaterial = new THREE.LineBasicMaterial({
+    color: 0xababab,
+    linewidth: 2.5
+  });
+  const edgesMesh = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+  return mesh.add(edgesMesh);
+}
+
+function addCubesToAxisScene(scene) {
+  const rightRedCube = createCube(0x9c4c4c);
+  rightRedCube.position.x += 1;
+  rightRedCube.userData = { command: VIEWS.RIGHT };
+  const leftRedCube = createCube(0x926d6d);
+  leftRedCube.position.x -= 1;
+  leftRedCube.userData = { command: VIEWS.LEFT };
+
+  const frontBlueCube = createCube(0x0000ff);
+  frontBlueCube.position.z += 1;
+  frontBlueCube.userData = { command: VIEWS.FRONT };
+
+  const backBlueCube = createCube(0x4c74c5);
+  backBlueCube.position.z -= 1;
+  backBlueCube.userData = { command: VIEWS.BACK };
+
+  const topGreenCube = createCube(0x00ff00);
+  topGreenCube.position.y += 1;
+  topGreenCube.userData = { command: VIEWS.TOP };
+
+  const bottomGreenCube = createCube(0xc6f5c6);
+  bottomGreenCube.position.y -= 1;
+  bottomGreenCube.userData = { command: VIEWS.BOTTOM };
+
+  scene.add(
+    rightRedCube,
+    leftRedCube,
+    frontBlueCube,
+    backBlueCube,
+    topGreenCube,
+    bottomGreenCube
+  );
 }
 
 function createMainContainer() {
