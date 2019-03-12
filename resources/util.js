@@ -1,14 +1,5 @@
 // Enums for rotation models
 
-let VIEWS = {
-  FRONT: 0,
-  BACK: 1,
-  RIGHT: 2,
-  LEFT: 3,
-  TOP: 4,
-  BOTTOM: 5
-};
-
 function loadModel(path, scene, controls, camera) {
   const len = scene.children.length;
   for (let i = len - 1; i > 0; i--) scene.remove(scene.children[i]);
@@ -70,6 +61,10 @@ function loadModel(path, scene, controls, camera) {
 }
 // Main object
 var robox = (function() {
+  const cameraDistance = 4;
+  let mouse = new THREE.Vector2(-1, 1);
+  let isMouseDown = false;
+  const raycaster = new THREE.Raycaster();
   const fov = 60;
   const width = document.getElementById("canvas-container").clientWidth;
   const height = document.getElementById("canvas-container").clientWidth;
@@ -101,7 +96,7 @@ var robox = (function() {
   const helper = new THREE.AxesHelper(2);
   // Axis Scene.
   const sceneAxis = new THREE.Scene();
-  sceneAxis.add(helper);
+  //sceneAxis.add(helper);
   // Axis Camera
   const cameraAxis = new THREE.PerspectiveCamera(
     fov,
@@ -111,7 +106,7 @@ var robox = (function() {
   );
   cameraAxis.up = camera.up;
   //cameraAxis.position = new THREE.Vector3(3, 0, 2);
-  cameraAxis.position.set(0, 0, 6);
+  cameraAxis.position.set(0, 0, cameraDistance);
   // cubes as buttons
   addCubesToAxisScene(sceneAxis);
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
@@ -132,6 +127,11 @@ var robox = (function() {
     getCamera: function() {
       return camera;
     },
+
+    getCameraDistance: () => {
+      return cameraDistance;
+    },
+
     getRenderer: function() {
       return renderer;
     },
@@ -158,8 +158,33 @@ var robox = (function() {
       return cameraAxis;
     },
 
+    getMouse: () => {
+      return mouse;
+    },
+
+    renderGizmo: () => {
+      cameraAxis.lookAt(new THREE.Vector3(0, 0, 0));
+      raycaster.setFromCamera(mouse, cameraAxis);
+      const intersects = raycaster.intersectObjects(sceneAxis.children);
+      if (typeof intersects[0] !== "undefined" && isMouseDown) {
+        executeCommand(intersects[0].object.userData.command);
+      }
+      rendererAxis.render(sceneAxis, cameraAxis);
+    },
+
     setRendererSize: function(width, height) {
       rendererAxis.setSize(width, height);
+    },
+    setXCoordinate: coordinate => {
+      mouse.x = coordinate;
+    },
+
+    setYCoordinate: coordinate => {
+      mouse.y = coordinate;
+    },
+
+    setMouseIsDown: click => {
+      isMouseDown = click;
     }
   };
 })();
@@ -187,29 +212,39 @@ function createCube(color) {
   return mesh.add(edgesMesh);
 }
 
+/*enum VIEWS = {
+  FRONT: 0,
+  BACK: 1,
+  RIGHT: 2,
+  LEFT: 3,
+  TOP: 4,
+  BOTTOM: 5
+}; */
+
 function addCubesToAxisScene(scene) {
   const rightRedCube = createCube(0x9c4c4c);
   rightRedCube.position.x += 1;
-  rightRedCube.userData = { command: VIEWS.RIGHT };
+  rightRedCube.userData = { command: 2 };
+
   const leftRedCube = createCube(0x926d6d);
   leftRedCube.position.x -= 1;
-  leftRedCube.userData = { command: VIEWS.LEFT };
+  leftRedCube.userData = { command: 3 };
 
   const frontBlueCube = createCube(0x0000ff);
   frontBlueCube.position.z += 1;
-  frontBlueCube.userData = { command: VIEWS.FRONT };
+  frontBlueCube.userData = { command: 0 };
 
   const backBlueCube = createCube(0x4c74c5);
   backBlueCube.position.z -= 1;
-  backBlueCube.userData = { command: VIEWS.BACK };
+  backBlueCube.userData = { command: 1 };
 
   const topGreenCube = createCube(0x00ff00);
   topGreenCube.position.y += 1;
-  topGreenCube.userData = { command: VIEWS.TOP };
+  topGreenCube.userData = { command: 4 };
 
   const bottomGreenCube = createCube(0xc6f5c6);
   bottomGreenCube.position.y -= 1;
-  bottomGreenCube.userData = { command: VIEWS.BOTTOM };
+  bottomGreenCube.userData = { command: 5 };
 
   scene.add(
     rightRedCube,
@@ -237,16 +272,84 @@ function createGizmoContainer() {
   const mainContainer = document.getElementById("model-view");
   const top = parentNode.clientHeight - mainContainer.clientHeight;
   const right = parentNode.clientWidth - mainContainer.clientWidth;
-  const mainRect = mainContainer.getBoundingClientRect();
   gizmoContainer.id = "gizmo";
   gizmoContainer.style.position = "absolute";
   gizmoContainer.style.width = "20%";
   gizmoContainer.style.height = "20%";
   gizmoContainer.style.margin = "5px";
-  gizmoContainer.style.right = `${right.toString()}px`;
-  gizmoContainer.style.top = `${top.toString()}px`;
+  gizmoContainer.style.right = `${right}px`;
+  gizmoContainer.style.top = `${top}px`;
+  const mouseMove = gizmoMouseMove(gizmoContainer);
+  gizmoContainer.addEventListener("mousemove", mouseMove);
+  gizmoContainer.addEventListener("mousedown", onMouseDown());
+  gizmoContainer.addEventListener("mouseup", onMouseUp());
   parentNode.appendChild(gizmoContainer);
-  const gizmoRect = gizmoContainer.getBoundingClientRect();
-  robox.setRendererSize(gizmoRect.width, gizmoRect.height);
+  robox.setRendererSize(
+    gizmoContainer.clientWidth,
+    gizmoContainer.clientHeight
+  );
   gizmoContainer.appendChild(robox.getAxisRenderer().domElement);
+}
+
+function executeCommand(command) {
+  // reset position
+  const gizmoCamera = robox.getAxisCamera();
+  const cameraDistance = robox.getCameraDistance();
+  robox.setMouseIsDown(false);
+  gizmoCamera.position.set(0, 0, cameraDistance);
+
+  switch (command) {
+    case 0:
+      console.log("FRONT");
+      break;
+    case 1:
+      console.log("BACK");
+      gizmoCamera.position.set(0, 0, -cameraDistance);
+      break;
+    case 2:
+      console.log("RIGHT");
+      gizmoCamera.position.set(cameraDistance, 0, 0);
+      break;
+    case 3:
+      console.log("LEFT");
+      gizmoCamera.position.set(-cameraDistance, 0, 0);
+      break;
+    case 4:
+      console.log("TOP");
+      gizmoCamera.position.set(0, cameraDistance, 0);
+      break;
+    case 5:
+      console.log("BOTTOM");
+      gizmoCamera.position.set(0, -cameraDistance, 0);
+    default:
+      break;
+  }
+}
+
+/**
+ * Listeners for Gizmo
+ */
+
+function gizmoMouseMove(gizmoContainer) {
+  return event => {
+    const gizmoRect = gizmoContainer.getBoundingClientRect();
+    robox.setXCoordinate(
+      ((event.clientX - gizmoRect.left) / gizmoRect.width) * 2 - 1
+    );
+    robox.setYCoordinate(
+      -((event.clientY - gizmoRect.top) / gizmoRect.height) * 2 + 1
+    );
+  };
+}
+
+function onMouseDown() {
+  return () => {
+    robox.setMouseIsDown(true);
+  };
+}
+
+function onMouseUp() {
+  return () => {
+    robox.setMouseIsDown(false);
+  };
 }

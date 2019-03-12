@@ -19,18 +19,11 @@ loadModel(
   robox.getControls(),
   robox.getCamera()
 );
-// Windows event:
-window.onresize = () => {
-  robox.getCamera().aspect = 600 / 500;
-  robox.getCamera().updateProjectionMatrix();
-
-  robox.getRenderer().setSize(600, 500);
-};
 
 // Configuration and rendering
 robox.configCamera();
 
-const resizeCanvas = () => {
+function resizeCanvas() {
   const mainContainerWidth = document.getElementById("model-view").clientWidth;
   const mainContainerHeight = document.getElementById("model-view")
     .clientHeight;
@@ -45,10 +38,10 @@ const resizeCanvas = () => {
   // renderer size
   robox.getRenderer().setSize(mainContainerWidth, mainContainerHeight);
   robox.getAxisRenderer().setSize(gizmoContainerWidth, gizmoContainerHeight);
-};
+}
 
 // Debounce function to handler resize event
-const debounce = (ms = 500, f) => {
+function debounce(ms = 500, f) {
   let timerId;
   return (...params) => {
     window.clearTimeout(timerId);
@@ -56,7 +49,7 @@ const debounce = (ms = 500, f) => {
       f.apply(null, params);
     }, ms);
   };
-};
+}
 
 window.addEventListener("resize", debounce(500, resizeCanvas));
 
@@ -68,9 +61,9 @@ var render = function() {
   //robox.getAxisCamera().position.sub(robox.getControls().target);
   //robox.getAxisCamera().position.setLength(6);
   //console.log(robox.getCamera().position);
-  robox.getAxisCamera().lookAt(new THREE.Vector3(0, 0, 0));
 
   robox.getRenderer().render(robox.getScene(), robox.getCamera());
-  robox.getAxisRenderer().render(robox.getAxisScene(), robox.getAxisCamera());
+  //robox.getAxisRenderer().render(robox.getAxisScene(), robox.getAxisCamera());
+  robox.renderGizmo();
 };
 render();
