@@ -93,10 +93,9 @@ var robox = (function() {
   });
   /*rendererAxis.setSize(80, 80);
   rendererAxis.setClearColor(0xd4d4bf, 1);*/
-  const helper = new THREE.AxesHelper(2);
+
   // Axis Scene.
   const sceneAxis = new THREE.Scene();
-  //sceneAxis.add(helper);
   // Axis Camera
   const cameraAxis = new THREE.PerspectiveCamera(
     fov,
@@ -295,32 +294,35 @@ function executeCommand(command) {
   // reset position
   const gizmoCamera = robox.getAxisCamera();
   const cameraDistance = robox.getCameraDistance();
+  const sceneCamera = robox.getCamera();
+  // Reset the mouse
   robox.setMouseIsDown(false);
+  // Set camera to same reference
   gizmoCamera.position.set(0, 0, cameraDistance);
+  sceneCamera.position.set(0, 0, cameraDistance);
 
   switch (command) {
     case 0:
-      console.log("FRONT");
       break;
     case 1:
-      console.log("BACK");
       gizmoCamera.position.set(0, 0, -cameraDistance);
+      sceneCamera.position.set(0, 0, -cameraDistance);
       break;
     case 2:
-      console.log("RIGHT");
       gizmoCamera.position.set(cameraDistance, 0, 0);
+      sceneCamera.position.set(cameraDistance, 0, 0);
       break;
     case 3:
-      console.log("LEFT");
       gizmoCamera.position.set(-cameraDistance, 0, 0);
+      sceneCamera.position.set(-cameraDistance, 0, 0);
       break;
     case 4:
-      console.log("TOP");
       gizmoCamera.position.set(0, cameraDistance, 0);
+      sceneCamera.position.set(0, cameraDistance, 0);
       break;
     case 5:
-      console.log("BOTTOM");
       gizmoCamera.position.set(0, -cameraDistance, 0);
+      sceneCamera.position.set(0, -cameraDistance, 0);
     default:
       break;
   }
