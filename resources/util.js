@@ -1,5 +1,3 @@
-// Enums for rotation models
-
 function loadModel(path, scene, controls, camera) {
   const len = scene.children.length;
   for (let i = len - 1; i > 0; i--) scene.remove(scene.children[i]);
@@ -61,7 +59,7 @@ function loadModel(path, scene, controls, camera) {
 }
 // Main object
 var robox = (function() {
-  const cameraDistance = 4;
+  const cameraDistance = 5;
   let mouse = new THREE.Vector2(-1, 1);
   let isMouseDown = false;
   const raycaster = new THREE.Raycaster();
@@ -168,6 +166,10 @@ var robox = (function() {
       if (typeof intersects[0] !== "undefined" && isMouseDown) {
         executeCommand(intersects[0].object.userData.command);
       }
+
+      cameraAxis.position.copy(camera.position);
+      cameraAxis.position.setLength(cameraDistance);
+
       rendererAxis.render(sceneAxis, cameraAxis);
     },
 
