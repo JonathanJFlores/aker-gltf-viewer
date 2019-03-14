@@ -103,7 +103,7 @@ var robox = (function() {
     fov,
     width / height,
     0.1,
-    1000
+    2000
   );
   cameraAxis.up = camera.up;
   //cameraAxis.position = new THREE.Vector3(3, 0, 2);
@@ -291,9 +291,14 @@ function createGizmoContainer() {
   gizmoContainer.style.right = `${right}px`;
   gizmoContainer.style.top = `${top}px`;
   const mouseMove = gizmoMouseMove(gizmoContainer);
+  const touchStart = onTouchStart(gizmoContainer);
+  const touchMove = gizmoTouchMove(gizmoContainer);
   gizmoContainer.addEventListener("mousemove", mouseMove);
   gizmoContainer.addEventListener("mousedown", onMouseDown());
   gizmoContainer.addEventListener("mouseup", onMouseUp());
+  gizmoContainer.addEventListener("touchmove", touchMove);
+  gizmoContainer.addEventListener("touchstart", touchStart);
+  gizmoContainer.addEventListener("touchend", onTouchEnd());
   parentNode.appendChild(gizmoContainer);
   robox.setRendererSize(
     gizmoContainer.clientWidth,
@@ -316,30 +321,30 @@ function executeCommand(command) {
   robox.setMouseIsDown(false);
   // Set camera to same reference
   gizmoCamera.position.set(0, 0, cameraDistance);
-  sceneCamera.position.set(0, 0, cameraDistance);
+  sceneCamera.position.set(0, 0, cameraDistance - 2);
 
   switch (command) {
     case 0:
       break;
     case 1:
       gizmoCamera.position.set(0, 0, -cameraDistance);
-      sceneCamera.position.set(0, 0, -cameraDistance);
+      sceneCamera.position.set(0, 0, -cameraDistance + 2);
       break;
     case 2:
       gizmoCamera.position.set(cameraDistance, 0, 0);
-      sceneCamera.position.set(cameraDistance, 0, 0);
+      sceneCamera.position.set(cameraDistance - 2, 0, 0);
       break;
     case 3:
       gizmoCamera.position.set(-cameraDistance, 0, 0);
-      sceneCamera.position.set(-cameraDistance, 0, 0);
+      sceneCamera.position.set(-cameraDistance + 2, 0, 0);
       break;
     case 4:
       gizmoCamera.position.set(0, cameraDistance, 0);
-      sceneCamera.position.set(0, cameraDistance, 0);
+      sceneCamera.position.set(0, cameraDistance - 2, 0);
       break;
     case 5:
       gizmoCamera.position.set(0, -cameraDistance, 0);
-      sceneCamera.position.set(0, -cameraDistance, 0);
+      sceneCamera.position.set(0, -cameraDistance + 2, 0);
     default:
       break;
   }
@@ -473,6 +478,38 @@ function onMouseDown() {
 }
 
 function onMouseUp() {
+  return () => {
+    robox.setMouseIsDown(false);
+  };
+}
+
+function gizmoTouchMove(gizmoContainer) {
+  return event => {
+    const gizmoRect = gizmoContainer.getBoundingClientRect();
+    robox.setXCoordinate(
+      ((event.touches[0].clientX - gizmoRect.left) / gizmoRect.width) * 2 - 1
+    );
+    robox.setYCoordinate(
+      -((event.touches[0].clientY - gizmoRect.top) / gizmoRect.height) * 2 + 1
+    );
+  };
+}
+
+function onTouchStart(gizmoContainer) {
+  return event => {
+    const gizmoRect = gizmoContainer.getBoundingClientRect();
+    robox.setXCoordinate(
+      ((event.touches[0].clientX - gizmoRect.left) / gizmoRect.width) * 2 - 1
+    );
+    robox.setYCoordinate(
+      -((event.touches[0].clientY - gizmoRect.top) / gizmoRect.height) * 2 + 1
+    );
+
+    robox.setMouseIsDown(true);
+  };
+}
+
+function onTouchEnd() {
   return () => {
     robox.setMouseIsDown(false);
   };
