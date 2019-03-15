@@ -1,17 +1,11 @@
-draw.io - Diagrams
-==================
+# Aker Viewer GLTF
 
 ## Description
 
-Create or edit diagrams using the draw.io editor integration.
+This module is based upon Drawio module for humhub: <https://github.com/humhub/humhub-modules-drawio>
 
-__Module website:__ <https://github.com/humhub/humhub-modules-drawio>    
-__Author:__ humhub
+# Installation
 
-## Changelog
-
-<https://github.com/humhub/humhub-modules-drawio/commits/master>
-
-## Bugtracker
-
-<https://github.com/humhub/humhub-modules-drawio/issues>
+1. Clone the repo
+2. Put the cloned folder inside `protected/humhub/modules`
+3. Enable it in Administration -> Modules
