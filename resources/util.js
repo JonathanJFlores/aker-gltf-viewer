@@ -64,10 +64,10 @@ var robox = (function() {
   let isMouseDown = false;
   const raycaster = new THREE.Raycaster();
   const fov = 60;
-  const width = document.getElementById("canvas-container").clientWidth;
-  const height = document.getElementById("canvas-container").clientWidth;
+  // const width = document.getElementById("canvas-container").clientWidth;
+  // const height = document.getElementById("canvas-container").clientWidth;
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 1000);
 
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -80,6 +80,7 @@ var robox = (function() {
   renderer.gammaFactor = 2.2;
   renderer.toneMappingExposure = 1.0;
   renderer.setClearColor(0x000000, 0);
+  console.log("RATIO: ", window.devicePixelRatio);
   renderer.setPixelRatio(window.devicePixelRatio);
 
   // Axis Renderer
@@ -99,12 +100,7 @@ var robox = (function() {
   // Axis Scene.
   const sceneAxis = new THREE.Scene();
   // Axis Camera
-  const cameraAxis = new THREE.PerspectiveCamera(
-    fov,
-    width / height,
-    0.1,
-    2000
-  );
+  const cameraAxis = new THREE.PerspectiveCamera(fov, 1, 0.1, 2000);
   cameraAxis.up = camera.up;
   //cameraAxis.position = new THREE.Vector3(3, 0, 2);
   cameraAxis.position.set(0, 0, cameraDistance);
@@ -185,6 +181,11 @@ var robox = (function() {
 
     setRendererSize: function(width, height) {
       rendererAxis.setSize(width, height);
+    },
+
+    setAspectRatio: (width, height) => {
+      camera.aspect = width / height;
+      cameraAxis.aspect = width / height;
     },
 
     setXCoordinate: coordinate => {
@@ -273,15 +274,13 @@ function createMainContainer() {
   const mainContainer = document.createElement("div");
   mainContainer.id = "model-view";
   mainContainer.style.width = parentNode.clientWidth;
-  console.log("WIDTH: ", parentNode.clientWidth);
+  console.log("WIDTH for parent: ", parentNode.clientWidth);
   mainContainer.style.height = parentNode.clientHeight;
-  console.log("HEIGHT: ", parentNode.clientHeight);
+  console.log("HEIGHT for parent: ", parentNode.clientHeight);
   parentNode.appendChild(mainContainer);
 
-  robox
-    .getRenderer()
-    .setSize(mainContainer.clientWidth, mainContainer.clientWidth);
-
+  robox.getRenderer().setSize(parentNode.clientWidth, parentNode.clientHeight);
+  robox.setAspectRatio(parentNode.clientWidth, parentNode.clientHeight);
   return mainContainer;
 }
 
@@ -295,7 +294,7 @@ function createGizmoContainer() {
   //const right = parentNode.clientWidth - mainContainer.clientWidth;
   gizmoContainer.id = "gizmo";
   gizmoContainer.style.position = "absolute";
-  gizmoContainer.style.width = "22%";
+  gizmoContainer.style.width = "20%";
   gizmoContainer.style.height = "20%";
   gizmoContainer.style.margin = "5px";
   gizmoContainer.style.right = `0px`;
