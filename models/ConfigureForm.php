@@ -229,6 +229,10 @@ class ConfigureForm extends \yii\base\Model
                 "/robots/secundaria/S1/S1_L02.gltf",
                 "/robots/secundaria/S1/S1_L03.gltf",
                 "/robots/secundaria/S1/S1_L04.gltf",
+                "/robots/secundaria/S1/S1_L05.gltf",
+                "/robots/secundaria/S1/S1_L06.gltf",
+                "/robots/secundaria/S1/S1_L07.gltf",
+                "/robots/secundaria/S1/S1_L08.gltf",
 
             ],
             "S2" => [
