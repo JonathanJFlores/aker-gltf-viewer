@@ -75,7 +75,7 @@ var robox = (function() {
     preserveDrawingBuffer: true,
     premultipliedAlpha: false
   });
-  renderer.setSize(width, height);
+  //renderer.setSize(width, height);
   renderer.gammaOutput = true;
   renderer.gammaFactor = 2.2;
   renderer.toneMappingExposure = 1.0;
@@ -186,6 +186,7 @@ var robox = (function() {
     setRendererSize: function(width, height) {
       rendererAxis.setSize(width, height);
     },
+
     setXCoordinate: coordinate => {
       mouse.x = coordinate;
     },
@@ -272,8 +273,15 @@ function createMainContainer() {
   const mainContainer = document.createElement("div");
   mainContainer.id = "model-view";
   mainContainer.style.width = parentNode.clientWidth;
+  console.log("WIDTH: ", parentNode.clientWidth);
   mainContainer.style.height = parentNode.clientHeight;
+  console.log("HEIGHT: ", parentNode.clientHeight);
   parentNode.appendChild(mainContainer);
+
+  robox
+    .getRenderer()
+    .setSize(mainContainer.clientWidth, mainContainer.clientWidth);
+
   return mainContainer;
 }
 
@@ -281,15 +289,17 @@ function createGizmoContainer() {
   const parentNode = document.getElementById("canvas-container");
   const gizmoContainer = document.createElement("div");
   const mainContainer = document.getElementById("model-view");
-  const top = parentNode.clientHeight - mainContainer.clientHeight;
-  const right = parentNode.clientWidth - mainContainer.clientWidth;
+  const toolbar = document.getElementById("topbar-first");
+
+  const top = toolbar.clientHeight;
+  //const right = parentNode.clientWidth - mainContainer.clientWidth;
   gizmoContainer.id = "gizmo";
   gizmoContainer.style.position = "absolute";
-  gizmoContainer.style.width = "20%";
+  gizmoContainer.style.width = "22%";
   gizmoContainer.style.height = "20%";
   gizmoContainer.style.margin = "5px";
-  gizmoContainer.style.right = `${right}px`;
-  gizmoContainer.style.top = `${top}px`;
+  gizmoContainer.style.right = `0px`;
+  gizmoContainer.style.top = `${top + 10}px`;
   const mouseMove = gizmoMouseMove(gizmoContainer);
   const touchStart = onTouchStart(gizmoContainer);
   const touchMove = gizmoTouchMove(gizmoContainer);
@@ -348,111 +358,6 @@ function executeCommand(command) {
     default:
       break;
   }
-}
-
-function makeTextSprite(message, parameters) {
-  if (parameters === undefined) parameters = {};
-
-  var fontface = parameters.hasOwnProperty("fontface")
-    ? parameters["fontface"]
-    : "Arial";
-
-  var fontsize = parameters.hasOwnProperty("fontsize")
-    ? parameters["fontsize"]
-    : 18;
-
-  var borderThickness = parameters.hasOwnProperty("borderThickness")
-    ? parameters["borderThickness"]
-    : 4;
-
-  var borderColor = parameters.hasOwnProperty("borderColor")
-    ? parameters["borderColor"]
-    : { r: 0, g: 0, b: 0, a: 1.0 };
-
-  var backgroundColor = parameters.hasOwnProperty("backgroundColor")
-    ? parameters["backgroundColor"]
-    : { r: 255, g: 255, b: 255, a: 1.0 };
-
-  //var spriteAlignment = parameters.hasOwnProperty("alignment") ?
-  //	parameters["alignment"] : THREE.SpriteAlignment.topLeft;
-
-  var canvas = document.createElement("canvas");
-  var context = canvas.getContext("2d");
-  context.font = "Bold " + fontsize + "px " + fontface;
-
-  // get size data (height depends only on font size)
-  var metrics = context.measureText(message);
-  var textWidth = metrics.width;
-
-  // background color
-  context.fillStyle =
-    "rgba(" +
-    backgroundColor.r +
-    "," +
-    backgroundColor.g +
-    "," +
-    backgroundColor.b +
-    "," +
-    backgroundColor.a +
-    ")";
-  // border color
-  context.strokeStyle =
-    "rgba(" +
-    borderColor.r +
-    "," +
-    borderColor.g +
-    "," +
-    borderColor.b +
-    "," +
-    borderColor.a +
-    ")";
-
-  context.lineWidth = borderThickness;
-  // TODO background fill.
-  roundRect(
-    context,
-    borderThickness / 2,
-    borderThickness / 2,
-    textWidth + borderThickness,
-    fontsize * 1.4 + borderThickness,
-    6
-  );
-  // 1.4 is extra height factor for text below baseline: g,j,p,q.
-
-  // text color
-  context.fillStyle = "rgba(0, 0, 0, 1.0)";
-
-  context.fillText(message, borderThickness, fontsize + borderThickness);
-
-  // canvas contents will be used for a texture
-  var texture = new THREE.Texture(canvas);
-  texture.needsUpdate = true;
-
-  var spriteMaterial = new THREE.SpriteMaterial({
-    map: texture,
-    useScreenCoordinates: false
-  });
-  var sprite = new THREE.Sprite(spriteMaterial);
-  //TODO Set Scale
-  sprite.scale.set(40, 30, 1.5);
-  return sprite;
-}
-
-// function for drawing rounded rectangles
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
 }
 
 /**
