@@ -198,6 +198,10 @@ class ConfigureForm extends \yii\base\Model
                 "/robots/primaria/P5/P5_L02.gltf",
                 "/robots/primaria/P5/P5_L03.gltf",
                 "/robots/primaria/P5/P5_L04.gltf",
+                "/robots/primaria/P5/P5_L05.gltf",
+                "/robots/primaria/P5/P5_L06.gltf",
+                "/robots/primaria/P5/P5_L07.gltf",
+                "/robots/primaria/P5/P5_L08.gltf",
             ],
             "P6" => [
                 "/robots/primaria/P6/P6_L01.gltf",
