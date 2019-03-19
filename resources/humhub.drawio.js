@@ -36,10 +36,11 @@ function resizeCanvas() {
   robox.getCamera().updateProjectionMatrix();
   robox.getAxisCamera().updateProjectionMatrix();
   // renderer size
-  robox.getRenderer().setSize(mainContainerWidth, mainContainerHeight, false);
-  robox
-    .getAxisRenderer()
-    .setSize(gizmoContainerWidth, gizmoContainerHeight, false);
+  console.log("*/*/**/*//**/*/");
+  console.log(mainContainerWidth, mainContainerHeight);
+  console.log("/**/*/*/*/*/*/");
+  robox.getRenderer().setSize(mainContainerWidth, mainContainerHeight);
+  robox.getAxisRenderer().setSize(gizmoContainerWidth, gizmoContainerHeight);
 }
 
 // Debounce function to handler resize event

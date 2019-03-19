@@ -274,13 +274,11 @@ function createMainContainer() {
   const mainContainer = document.createElement("div");
   mainContainer.id = "model-view";
   mainContainer.style.width = parentNode.clientWidth;
-  console.log("WIDTH for parent: ", parentNode.clientWidth);
   mainContainer.style.height = parentNode.clientHeight;
-  console.log("HEIGHT for parent: ", parentNode.clientHeight);
   parentNode.appendChild(mainContainer);
-
+  console.log(parentNode.clientWidth, parentNode.clientHeight);
   robox.getRenderer().setSize(parentNode.clientWidth, parentNode.clientHeight);
-  robox.setAspectRatio(parentNode.clientWidth, parentNode.clientHeight);
+  //robox.setAspectRatio(mainContainer.clientWidth, mainContainer.clientHeight);
   return mainContainer;
 }
 
