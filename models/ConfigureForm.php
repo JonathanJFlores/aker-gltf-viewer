@@ -16,7 +16,12 @@ class ConfigureForm extends \yii\base\Model
     public static function getModelsByGrade($grade)
     {
         $routes = [
-            "K1" => [],
+            "K1" => [
+                "/robots/kinder/K1/K1_L01.gltf",
+                "/robots/kinder/K1/K1_L02.gltf",
+                "/robots/kinder/K1/K1_L03.gltf",
+                "/robots/kinder/K1/K1_L04.gltf"
+            ],
             "K2" => [
                 "/robots/kinder/K2/K2_L01_1.gltf",
                 "/robots/kinder/K2/K2_L01_2.gltf",
