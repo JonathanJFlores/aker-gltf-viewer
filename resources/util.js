@@ -63,11 +63,10 @@ var robox = (function() {
   let mouse = new THREE.Vector2(-1, 1);
   let isMouseDown = false;
   const raycaster = new THREE.Raycaster();
-  const fov = 60;
-  // const width = document.getElementById("canvas-container").clientWidth;
-  // const height = document.getElementById("canvas-container").clientWidth;
+  const fov = 50;
+  const aspectRatio = window.innerWidth / window.innerHeight;
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(fov, aspectRatio, 0.1, 1000);
 
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -80,7 +79,6 @@ var robox = (function() {
   renderer.gammaFactor = 2.2;
   renderer.toneMappingExposure = 1.0;
   renderer.setClearColor(0x000000, 0);
-  console.log("RATIO: ", window.devicePixelRatio);
   renderer.setPixelRatio(window.devicePixelRatio);
 
   // Axis Renderer
@@ -90,17 +88,12 @@ var robox = (function() {
     preserveDrawingBuffer: true,
     premultipliedAlpha: false
   });
-  //rendererAxis.gammaOutput = true;
-  //rendererAxis.gammaFactor = 2.2;
-  //rendererAxis.toneMappingExposure = 1.0;
   rendererAxis.setPixelRatio(window.devicePixelRatio);
-  /*rendererAxis.setSize(80, 80);
-  rendererAxis.setClearColor(0xd4d4bf, 1);*/
 
   // Axis Scene.
   const sceneAxis = new THREE.Scene();
   // Axis Camera
-  const cameraAxis = new THREE.PerspectiveCamera(fov, 1, 0.1, 2000);
+  const cameraAxis = new THREE.PerspectiveCamera(fov, aspectRatio, 0.1, 2000);
   cameraAxis.up = camera.up;
   //cameraAxis.position = new THREE.Vector3(3, 0, 2);
   cameraAxis.position.set(0, 0, cameraDistance);
@@ -144,7 +137,6 @@ var robox = (function() {
     configCamera: function() {
       camera.add(ambientLight);
       camera.add(directionalLight);
-      //scene.add(hemiLight);
       scene.add(camera);
 
       sceneAxis.add(cameraAxis);
@@ -184,6 +176,7 @@ var robox = (function() {
     },
 
     setAspectRatio: (width, height) => {
+      console.log("ASPECT: ", width / height);
       camera.aspect = width / height;
       cameraAxis.aspect = width / height;
     },
@@ -278,7 +271,6 @@ function createMainContainer() {
   parentNode.appendChild(mainContainer);
   console.log(parentNode.clientWidth, parentNode.clientHeight);
   robox.getRenderer().setSize(parentNode.clientWidth, parentNode.clientHeight);
-  //robox.setAspectRatio(mainContainer.clientWidth, mainContainer.clientHeight);
   return mainContainer;
 }
 
