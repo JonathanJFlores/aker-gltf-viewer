@@ -288,6 +288,7 @@ class ConfigureForm extends \yii\base\Model
             ],
             "B2" => [
                 "/robots/bachillerato/B2/LS5_L05.gltf",
+                "/robots/bachillerato/B2/LS5_L06.gltf",
                 "/robots/bachillerato/B2/LS5_L07.gltf",
                 "/robots/bachillerato/B2/LS5_L08.gltf"
             ],
