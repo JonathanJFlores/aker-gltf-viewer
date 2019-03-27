@@ -294,7 +294,12 @@ class ConfigureForm extends \yii\base\Model
                 "/robots/bachillerato/B2/LS5_L05.gltf",
                 "/robots/bachillerato/B2/LS5_L06.gltf",
                 "/robots/bachillerato/B2/LS5_L07.gltf",
-                "/robots/bachillerato/B2/LS5_L08.gltf"
+                "/robots/bachillerato/B2/LS5_L08.gltf",
+                "/robots/bachillerato/B2/LS5_L09.gltf",
+                "/robots/bachillerato/B2/LS5_L10.gltf",
+                "/robots/bachillerato/B2/LS5_L11.gltf",
+                "/robots/bachillerato/B2/LS5_L12.gltf",
+                "/robots/bachillerato/B2/LS5_L13.gltf",
             ],
         ];
         return $routes[$grade];
