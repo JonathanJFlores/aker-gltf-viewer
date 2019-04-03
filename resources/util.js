@@ -201,7 +201,25 @@ function onTransitionEnd(event) {
   const container = createMainContainer();
   container.appendChild(robox.getRenderer().domElement);
   createGizmoContainer();
+  const toolbar = document.getElementById("topbar-first");
+  const top = toolbar.clientHeight;
+  const btn = document.getElementById("close-btn");
+  btn.style.top = `${top + 50}px`;
+  btn.style.display = "block";
 }
+
+/*function createCloseButton() {
+  const btn = document.createElement("button");
+  btn.id = "btn-close-canvas";
+  btn.innerHTML = "Return";
+  btn.onclick = window.history.back();
+  btn.style.zIndex = "1000000";
+  btn.style.position = "absolute";
+  btn.style.left = "0px";
+  const top = toolbar.clientHeight;
+  btn.style.top = `${top + 10}px`;
+  return btn;
+}*/
 
 function createCube(color) {
   const geometry = new THREE.BoxGeometry(1, 1, 1);

@@ -4,6 +4,7 @@ $bundle = \humhub\modules\drawio\assets\Assets::register($this);
 ?>
 
 <div id="canvas-container">
+    <a id="close-btn" class="close-btn" onclick="return window.history.back()"> X </a>
     <section id="loading-screen">
         <div id="loader"></div>
     </section>
