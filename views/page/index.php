@@ -11,7 +11,7 @@ $bundle = \humhub\modules\drawio\assets\Assets::register($this);
         <?php
         $backSlash = preg_split('/\//', $route);
         setcookie(preg_split('/\./', $backSlash[sizeof($backSlash) - 1])[0], true, time() + (86400 * 365));
-        echo $bundle->baseUrl . $route
+        echo $route
         ?>
 
     </div>
