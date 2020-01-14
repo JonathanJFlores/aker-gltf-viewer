@@ -354,24 +354,22 @@ class ConfigureForm extends \yii\base\Model
                 "/robots/secundaria/S3/S3_L25.gltf",
             ],
             "B1" => [
-                "/robots/bachillerato/B1/LS4-L05.gltf",
-                "/robots/bachillerato/B1/LS4-L06.gltf",
-                "/robots/bachillerato/B1/LS4-L07.gltf",
-                "/robots/bachillerato/B1/LS4-L08.gltf",
-                "/robots/bachillerato/B1/LS4-L09.gltf",
-                "/robots/bachillerato/B1/LS4-L10.gltf",
-                "/robots/bachillerato/B1/LS4-L11.gltf"
+                "/robots/bachillerato/B1/B1_L01.gltf",
+                "/robots/bachillerato/B1/B1_L02.gltf",
+                "/robots/bachillerato/B1/B1_L03.gltf",
+                "/robots/bachillerato/B1/B1_L04.gltf",
             ],
             "B2" => [
-                "/robots/bachillerato/B2/LS5_L05.gltf",
-                "/robots/bachillerato/B2/LS5_L06.gltf",
-                "/robots/bachillerato/B2/LS5_L07.gltf",
-                "/robots/bachillerato/B2/LS5_L08.gltf",
-                "/robots/bachillerato/B2/LS5_L09.gltf",
-                "/robots/bachillerato/B2/LS5_L10.gltf",
-                "/robots/bachillerato/B2/LS5_L11.gltf",
-                "/robots/bachillerato/B2/LS5_L12.gltf",
-                "/robots/bachillerato/B2/LS5_L13.gltf",
+                "/robots/bachillerato/B2/B2_L01.gltf",
+                "/robots/bachillerato/B2/B2_L02.gltf",
+                "/robots/bachillerato/B2/B2_L03.gltf",
+                "/robots/bachillerato/B2/B2_L04.gltf",
+            ],
+            "B3" => [
+                "/robots/bachillerato/B2/B2_L01.gltf",
+                "/robots/bachillerato/B2/B2_L02.gltf",
+                "/robots/bachillerato/B2/B2_L03.gltf",
+                "/robots/bachillerato/B2/B2_L04.gltf",
             ],
         ];
         return $routes[$grade];
